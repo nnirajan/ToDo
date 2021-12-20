@@ -60,4 +60,13 @@ class TodoPersistentService {
         }
     }
     
+    func delete(item: ToDoItem) {
+        viewContext.delete(item)
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Failed to delete, \(error.localizedDescription)")
+        }
+    }
+    
 }
