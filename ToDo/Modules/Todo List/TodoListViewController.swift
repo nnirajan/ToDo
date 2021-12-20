@@ -143,4 +143,19 @@ extension TodoListViewController: UITableViewDelegate {
         showTextFieldAlert(with: todoItem)
     }
     
+    // MARK: trailingSwipeActionsConfigurationForRowAt
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let todoItem = todoItems.element(at: indexPath.item)
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completionHandler) in
+            guard let self = self,
+                  let todoItem = todoItem else { return }
+            self.todoPersistentService.delete(item: todoItem)
+            self.fetchData()
+            completionHandler(true)
+        }
+        delete.backgroundColor = .red
+        let configuration = UISwipeActionsConfiguration(actions: [delete])
+        return configuration
+    }
+    
 }
