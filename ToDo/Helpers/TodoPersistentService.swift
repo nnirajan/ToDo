@@ -41,11 +41,22 @@ class TodoPersistentService {
         let newItem = ToDoItem(context: viewContext)
         newItem.id = item.id
         newItem.title = item.title
-        newItem.checked = item.checked
+        newItem.checked = item.checked ?? false
         do {
             try viewContext.save()
         } catch {
             fatalError("Failed to save, \(error.localizedDescription)")
+        }
+    }
+    
+    func update(oldItem: ToDoItem, newItem: TodoItemModel) {
+        oldItem.id = newItem.id
+        oldItem.title = newItem.title
+        oldItem.checked = newItem.checked ?? false
+        do {
+            try viewContext.save()
+        } catch {
+            fatalError("Failed to update, \(error.localizedDescription)")
         }
     }
     
