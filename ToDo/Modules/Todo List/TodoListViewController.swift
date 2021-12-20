@@ -19,6 +19,8 @@ class TodoListViewController: UIViewController, Storyboarded {
             reloadTableView()
         }
     }
+    
+    private var search = UISearchController(searchResultsController: nil)
 
     // MARK: - IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -28,12 +30,11 @@ class TodoListViewController: UIViewController, Storyboarded {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setup()
+        checkForSearchItems()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = "TODO LIST"
-        fetchData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,8 +56,18 @@ class TodoListViewController: UIViewController, Storyboarded {
     
     // MARK: setupNavigationBar
     private func setupNavigationBar() {
+        navigationItem.title = "TODO LIST"
+        
         let addBarButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItem = addBarButton
+        
+        search.searchBar.delegate = self
+        search.searchBar.sizeToFit()
+        search.hidesNavigationBarDuringPresentation = false
+        self.definesPresentationContext = true
+        search.searchBar.placeholder = "Search here"
+        navigationItem.searchController = search
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     // MARK: - setupTableView
@@ -93,7 +104,7 @@ class TodoListViewController: UIViewController, Storyboarded {
             }
             let newTodoItem = TodoItemModel(id: UUID().uuidString, title: typedText, checked: false)
             self.todoPersistentService.save(item: newTodoItem)
-            self.fetchData()
+            self.checkForSearchItems()
         }
     }
     
@@ -101,7 +112,16 @@ class TodoListViewController: UIViewController, Storyboarded {
     private func updateItem(oldItem: ToDoItem) {
         let newItem = TodoItemModel(id: oldItem.id, title: oldItem.title, checked: oldItem.checked)
         todoPersistentService.update(oldItem: oldItem, newItem: newItem)
-        fetchData()
+        checkForSearchItems()
+    }
+    
+    private func checkForSearchItems() {
+        let searchedText = search.searchBar.text!.lowercased()
+        if !searchedText.isEmpty {
+            todoItems = todoItems.filter({ ($0.title?.contains(searchedText) ?? false) || ($0.id?.contains(searchedText) ?? false ) })
+        } else {
+            fetchData()
+        }
     }
     
     // MARK: - objc functions
@@ -150,12 +170,30 @@ extension TodoListViewController: UITableViewDelegate {
             guard let self = self,
                   let todoItem = todoItem else { return }
             self.todoPersistentService.delete(item: todoItem)
-            self.fetchData()
+            self.checkForSearchItems()
             completionHandler(true)
         }
         delete.backgroundColor = .red
         let configuration = UISwipeActionsConfiguration(actions: [delete])
         return configuration
+    }
+    
+}
+
+// MARK: UISearchBarDelegate
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+        checkForSearchItems()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        fetchData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        checkForSearchItems()
     }
     
 }
