@@ -8,6 +8,6 @@
 import Foundation
 
 struct TodoItemModel {
-    let id, title: String
-    let checked: Bool
+    var id, title: String?
+    var checked: Bool?
 }
