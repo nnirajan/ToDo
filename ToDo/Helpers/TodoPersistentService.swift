@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class TodoPersistentService {
-    
+    // MARK: - properties
     static let shared = TodoPersistentService()
     
     // MARK: - persistentContainer
@@ -28,6 +28,10 @@ class TodoPersistentService {
         return persistentContainer.viewContext
     }
     
+    // MARK: - private init for singleton
+    private init() { }
+    
+    // MARK: - fetch()
     func fetch() -> [ToDoItem] {
         do {
             let items = try viewContext.fetch(ToDoItem.fetchRequest())
@@ -36,7 +40,8 @@ class TodoPersistentService {
             fatalError("Failed to fetch, \(error.localizedDescription)")
         }
     }
-
+    
+    // MARK: - save
     func save(item: TodoItemModel) {
         let newItem = ToDoItem(context: viewContext)
         newItem.id = item.id
@@ -49,6 +54,7 @@ class TodoPersistentService {
         }
     }
     
+    // MARK: - update
     func update(oldItem: ToDoItem, newItem: TodoItemModel) {
         oldItem.id = newItem.id
         oldItem.title = newItem.title
@@ -60,6 +66,7 @@ class TodoPersistentService {
         }
     }
     
+    // MARK: - delete
     func delete(item: ToDoItem) {
         viewContext.delete(item)
         do {
@@ -68,5 +75,4 @@ class TodoPersistentService {
             fatalError("Failed to delete, \(error.localizedDescription)")
         }
     }
-    
 }

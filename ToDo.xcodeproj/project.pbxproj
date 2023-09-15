@@ -94,6 +94,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08140C6B2AB414B100175194 /* Extras */ = {
+			isa = PBXGroup;
+			children = (
+				9B4A1B84276E38A700CCB3BC /* AppDelegate.swift */,
+				9B4A1B90276E38A700CCB3BC /* Assets.xcassets */,
+				9B4A1B92276E38A700CCB3BC /* LaunchScreen.storyboard */,
+			);
+			path = Extras;
+			sourceTree = "<group>";
+		};
 		9B1CFA3B276F1BEB00AB93D4 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,14 +189,12 @@
 		9B4A1B83276E38A700CCB3BC /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
+				08140C6B2AB414B100175194 /* Extras */,
 				9B1CFA652770880A00AB93D4 /* Helpers */,
 				9B1CFA46276F1E7800AB93D4 /* Resources */,
 				9B1CFA3D276F1C0200AB93D4 /* Extensions */,
 				9B1CFA3C276F1BF400AB93D4 /* Models */,
 				9B1CFA3B276F1BEB00AB93D4 /* Modules */,
-				9B4A1B84276E38A700CCB3BC /* AppDelegate.swift */,
-				9B4A1B90276E38A700CCB3BC /* Assets.xcassets */,
-				9B4A1B92276E38A700CCB3BC /* LaunchScreen.storyboard */,
 				9B4A1B95276E38A700CCB3BC /* Info.plist */,
 				9B4A1B8D276E38A700CCB3BC /* ToDo.xcdatamodeld */,
 			);
